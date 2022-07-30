@@ -1,13 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Number of t's
+# Number of T's
 n = 3
+# dimensional parameter, controls general flashbang strength
 alpha = 0.1
 
-# exponential parameter
+# exponential parameter, controls fall off of the flashbang very close to the T
 a = 0.4
-# Define t's positions
+# Define T's positions
 
 t_pos = [(0.5,0.4), (0.5,0.4+0.2828427125)]
 
@@ -18,7 +19,7 @@ X, Y = np.meshgrid(x, y)
 
 
 def u(r):
-    return (a*np.e)**2 * np.exp(-a/r)/(4*r*r) * np.sin(2*np.pi*4*r)
+    return a*(np.e)**2 * np.exp(-a/r)/(4*r*r) * np.sin(2*np.pi*4*r)
 
 
 def h(x, y):
