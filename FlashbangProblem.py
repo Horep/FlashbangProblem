@@ -1,45 +1,46 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Number of T's
-n = 3
-# dimensional parameter, controls general flashbang strength
+# strength
 alpha = 0.1
 
-# exponential parameter, controls fall off of the flashbang very close to the T
-a = 0.4
-# Define T's positions
+# exponential parameter
+a = 0.2
+# Define t's positions
 
-t_pos = [(0.5,0.4), (0.5,0.4+0.2828427125)]
+t_pos = [(0.25, 0.5), (0.75, 0.5)]
 
-x = np.linspace(0, 1, 10000)
-y = x
+x_lin = np.linspace(0, 1, 5000)
+y_lin = x_lin
 
-X, Y = np.meshgrid(x, y)
+X, Y = np.meshgrid(x_lin, y_lin)
 
 
-def u(r):
-    return a*(np.e)**2 * np.exp(-a/r)/(4*r*r) * np.sin(2*np.pi*4*r)
+def u(r):  # objective function to be graphed
+    res = a*np.e**2 * np.exp(-a/r)/(4*r*r)
+    return res
 
 
 def h(x, y):
     res = 0
-    for x_k, y_k in t_pos:
-        r = np.sqrt((x - x_k)**2 + (y - y_k)**2)
-        res += u(r)
+    for x_n, y_n in t_pos:
+        r = np.sqrt((x - x_n)**2 + (y - y_n)**2)  # calculates the distance from the T
+        res += u(r)  # adds the cost from that T
     return alpha*res
 
 
-Z = h(X, Y)
+Z = h(X, Y)  # calculate the flashbang value at each point in the region
 
 
 fig, ax = plt.subplots()
 ax.set_xlim(0, 1)
 ax.set_ylim(0, 1)
 ax.set_aspect('equal', adjustable='box')
-ax.axis('off')
-#for x_k, y_k in t_pos:
-#    ax.plot(x_k, y_k, 'rx')
+ax.set_xlabel("x")
+ax.set_ylabel("y")
+for x_k, y_k in t_pos:  # for each T, plot their position as a red x
+    ax.plot(x_k, y_k, 'rx')
 pcm = ax.pcolormesh(X, Y, Z, cmap='inferno')
-#fig.colorbar(pcm)
-fig.savefig("flashbangexample.png", dpi=1000, bbox_inches='tight', pad_inches=0)
+fig.colorbar(pcm, label="Flash")
+fig.savefig("flashbang_three_ts_1.png", dpi=1000, bbox_inches='tight', pad_inches=0)
+plt.show()
